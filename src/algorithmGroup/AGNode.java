@@ -1,14 +1,14 @@
-package cautiousWalk;
+package algorithmGroup;
 
 import java.util.ArrayList;
 
 import datastructures.Node;
 
-public class CWNode extends Node {
+public class AGNode extends Node{
 	private ArrayList<Integer> whiteBoard;
 	
-	public CWNode(String _id) {
-		super(_id);
+	public AGNode(String id) {
+		super(id);
 		setLeftEdge(null);
 		setRightEdge(null);
 	}

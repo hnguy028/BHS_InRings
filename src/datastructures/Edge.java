@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import mobileAgents.Agent;
 
 public class Edge {
-	private Node left;
-	private Node right;
-	private ArrayList<Agent> agentList;
+	protected Node left;
+	protected Node right;
+	protected ArrayList<Agent> agentList;
 	
 	public Edge() {
 		left = null;
@@ -33,12 +33,18 @@ public class Edge {
 	
 	public void setRightNode(Node node) { right = node; }
 	
+	public void putAgent(Agent agent) { agentList.add(agent); }
+	
+	public void removeAgent(Agent agent) { agentList.remove(agent); }
+	
 	public String getAgentString() {
 		StringBuilder agentString = new StringBuilder("[");
 		
+		String prefix = "";
 		for(Agent agent : agentList) {
-			String string = agent.getName() + ", ";
+			String string = prefix + agent.getName();
 			agentString.append(string);
+			prefix = ", ";
 		}
 		
 		agentString.append("]");

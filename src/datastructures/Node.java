@@ -1,19 +1,22 @@
 package datastructures;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import mobileAgents.Agent;
 
 public class Node {
-	private String id;
+	protected String id;
 	
-	private Edge leftEdge;
-	private Edge rightEdge;
+	protected Edge leftEdge;
+	protected Edge rightEdge;
 	
-	private boolean isBlackHole;
-	private boolean isHomebase;
+	protected boolean isBlackHole;
+	protected boolean isHomebase;
 	
-	private ArrayList<Agent> agentList;
+	protected ArrayList<Agent> agentList;
+	
+	protected Object whiteBoard;
 	
 	public Node(String _id) {
 		id = _id;
@@ -23,6 +26,8 @@ public class Node {
 	}
 	
 	public String getId() { return id; }
+	
+	public Object getWhiteBoard() throws InstantiationException { throw new InstantiationException("Needs to be implmented"); }
 	
 	public void setLeftEdge(Edge edge) { leftEdge = edge; }
 	
@@ -34,6 +39,8 @@ public class Node {
 
 	public void setAsHomeBase() { isHomebase = true; }
 	
+	public ArrayList<Agent> getAgentList() { return agentList; }
+	
 	public boolean isHomebase() { return isHomebase; }
 	
 	public void setAsBlackHole() { isBlackHole = true; }
@@ -44,12 +51,16 @@ public class Node {
 		agentList.add(agent);
 	}
 	
+	public void removeAgent(Agent agent) { agentList.remove(agent); }
+	
 	public String getAgentString() {
 		StringBuilder agentString = new StringBuilder("[");
 		
+		String prefix = "";
 		for(Agent agent : agentList) {
-			String string = agent.getName() + ", ";
+			String string = prefix + agent.getName();
 			agentString.append(string);
+			prefix = ", ";
 		}
 		
 		agentString.append("]");

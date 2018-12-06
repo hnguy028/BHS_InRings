@@ -2,9 +2,10 @@ package engine;
 
 import java.awt.event.MouseWheelEvent;
 
+import algorithmGroup.AGEdge;
+import algorithmGroup.AGNode;
 import cautiousWalk.CWEdge;
 import cautiousWalk.CWNode;
-import datastructures.Graph;
 import datastructures.Ring;
 
 public class GraphManager {
@@ -12,8 +13,12 @@ public class GraphManager {
 		switch (algorithm) {
 		case "CautiousWalk":
 			return generateCautiousWalkGraph(size);
-		case "Algorithm1":
-			return null;
+		case "AlgorithmGroup":
+			return generateAlgorithmGroupGraph(size);
+		case "AlgorithmOptAvgTime":
+			return generateAlgorithmOptAvgTime(size);
+		case "AlgorithmOptTeamSize":
+			return generateAlgorithmOptTeamSize(size);
 		default:
 			return null;
 		}
@@ -25,6 +30,28 @@ public class GraphManager {
 		for(int i = 0; i < graphSize; i++) {
 			ring.addNewNode(new CWNode("ID#" + i), new CWEdge());
 		}
+		
+		return ring;
+	}
+	
+	public Ring generateAlgorithmGroupGraph(int graphSize) {
+		Ring ring = new Ring();
+		
+		for(int i = 0; i < graphSize; i++) {
+			ring.addNewNode(new AGNode("ID#" + i), new AGEdge());
+		}
+		
+		return ring;
+	}
+	
+	public Ring generateAlgorithmOptAvgTime(int graphSize) {
+		Ring ring = new Ring();
+		
+		return ring;
+	}
+	
+	public Ring generateAlgorithmOptTeamSize(int graphSize) {
+		Ring ring = new Ring();
 		
 		return ring;
 	}
