@@ -8,6 +8,10 @@ public class MainLoop {
 		String algorithm = "GROUP";
 		int graphSize = 9;
 		
+		// min and max values for rng delay in traveling edge - to simulate asynch agents
+		int minTravelTime = 0;
+		int maxTravelTime = 3;
+		
 		System.out.println("*************** Program Start ***************");
 		
 		switch (algorithm) {

@@ -1,11 +1,9 @@
 package algorithmGroup;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Random;
 
-import cautiousWalk.CWAgent;
 import datastructures.Ring;
 import engine.GraphManager;
 import mobileAgents.Agent;
@@ -15,12 +13,13 @@ public class AlgorithmGroup {
 	private Random rng = new Random();
 	
 	private int numAgents;
-	private int groupSize;
+	private int q;
 	
 	private int homebaseIndex;
 	private int blackHoleIndex;
 	
-	private ArrayList<Integer> homebaseWhiteBoard;
+	private ArrayList<String> homebaseWhiteBoard;
+	private HashMap<Integer, Character> homebaseTBWhiteBoard;
 	
 	private ArrayList<AGAgent> agentList; 
 	
@@ -31,7 +30,7 @@ public class AlgorithmGroup {
 		graphSize = _n;
 		
 		numAgents = _n - 1;
-		groupSize = numAgents / 4;
+		q = numAgents / 4;
 		
 		// Generate graph
 		graph = new GraphManager().generateGraph("AlgorithmGroup", graphSize);
@@ -39,6 +38,9 @@ public class AlgorithmGroup {
 		// Generate blackhole and homebase index
 		homebaseIndex = rng.nextInt(graphSize);
 		blackHoleIndex = rng.nextInt(graphSize);
+		
+		homebaseIndex = 2;
+		blackHoleIndex = 4;
 				
 		// Ensure blackhole and homebase indices are different 
 		while(homebaseIndex == blackHoleIndex) {
@@ -50,23 +52,23 @@ public class AlgorithmGroup {
 		// Generate agents
 		// LEFT
 		int j = 0;
-		for(int i = 0; i < groupSize; i++, j++) {
-			agentList.add(new AGAgent(j, i, groupSize, AgentGroup.LEFT, "Agent#" + j + ":L:" + i, homebase));
+		for(int i = 0; i < q; i++, j++) {
+			agentList.add(new AGAgent(j, i, q, graphSize, AgentGroup.LEFT, "Agent#" + j + ":L:" + i, homebase));
 		}
 		
 		// RIGHT
-		for(int i = 0; i < groupSize; i++, j++) {
-			agentList.add(new AGAgent(j, i, groupSize, AgentGroup.RIGHT, "Agent#" + j + ":R:" + i, homebase));
+		for(int i = 0; i < q; i++, j++) {
+			agentList.add(new AGAgent(j, i, q, graphSize, AgentGroup.RIGHT, "Agent#" + j + ":R:" + i, homebase));
 		}
 		
 		// MIDDLE
-		for(int i = 0; i < groupSize + 1; i++, j++) {
-			agentList.add(new AGAgent(j, i, groupSize + 1, AgentGroup.MIDDLE, "Agent#" + j + ":M:" + i, homebase));
+		for(int i = 0; i < q + 1; i++, j++) {
+			agentList.add(new AGAgent(j, i, q, graphSize, AgentGroup.MIDDLE, "Agent#" + j + ":M:" + i, homebase));
 		}
 		
 		// TIEBREAKER
-		for(int i = 0; i < groupSize - 1; i++, j++) {
-			agentList.add(new AGAgent(j, i, groupSize - 1, AgentGroup.LEFT, "Agent#" + j + ":T:" + i, homebase));
+		for(int i = 0; i < q - 1; i++, j++) {
+			agentList.add(new AGAgent(j, i, q, graphSize, AgentGroup.TIEBREAKER, "Agent#" + j + ":T:" + i, homebase));
 		}
 				
 		// Let the respective nodes know that they are blackhole and homebase (and set the agents at homebase)
@@ -74,8 +76,11 @@ public class AlgorithmGroup {
 		setBlackHole(blackHoleIndex);
 				
 		// Create and set global home base whiteboard
-		homebaseWhiteBoard = new ArrayList<Integer>(Collections.nCopies(agentList.size(), 0));
+		homebaseWhiteBoard = new ArrayList<String>();
 		((AGNode) graph.getNodeList().get(homebaseIndex)).setWhiteBoard(homebaseWhiteBoard);
+		
+		homebaseTBWhiteBoard = new HashMap<Integer,Character>();
+		((AGNode) graph.getNodeList().get(homebaseIndex)).setTBWhiteBoard(homebaseTBWhiteBoard);
 				
 		// Print initial state
 		graph.print(); 
@@ -90,7 +95,7 @@ public class AlgorithmGroup {
 		boolean loop = true;
 		
 		// max time units - for testing
-		int loopBound = 10;
+		int loopBound = 100;
 				
 		// int blackHoleOffset = 0;
 		
@@ -98,8 +103,14 @@ public class AlgorithmGroup {
 			if(loopBound <= 0) { loop = false; System.out.println("Forced Termination!");}
 			
 			// move agents
+			for(AGAgent agent : agentList) {
+				if(agent.moveAndCheck()) {
+					loop = false;
+				}
+			}
 			
-			// check termination condition
+			graph.print();
+			System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString());
 			
 			loopBound--;
 		}
