@@ -3,6 +3,7 @@ package algorithmOAT;
 import datastructures.Edge;
 
 public class ATEdge extends Edge {
+	
 	public ATEdge() {
 		super(null, null);
 	}

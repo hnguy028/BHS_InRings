@@ -4,9 +4,11 @@ import algorithmGroup.AGEdge;
 import algorithmGroup.AGNode;
 import algorithmOAT.ATEdge;
 import algorithmOAT.ATNode;
-import cautiousWalk.CWEdge;
-import cautiousWalk.CWNode;
+import algorithmOTS.TSEdge;
+import algorithmOTS.TSNode;
 import datastructures.Ring;
+import worstCaseCW.CWEdge;
+import worstCaseCW.CWNode;
 
 public class GraphManager {
 	public Ring generateGraph(String algorithm, int size) {
@@ -56,6 +58,10 @@ public class GraphManager {
 	
 	public Ring generateAlgorithmOptTeamSize(int graphSize) {
 		Ring ring = new Ring();
+		
+		for(int i = 0; i < graphSize; i++) {
+			ring.addNewNode(new TSNode("ID#" + i), new TSEdge());
+		}
 		
 		return ring;
 	}

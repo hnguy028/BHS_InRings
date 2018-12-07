@@ -97,7 +97,12 @@ public class AlgorithmOAT {
 		}
 		
 		ATNode homebase = (ATNode) graph.getNodeList().get(homebaseIndex);
-		System.out.println(homebase.getTerminationData().toString());
+		ArrayList<Integer>termData = homebase.getTerminationData();
+		System.out.println(termData.toString());
+		
+		
+		System.out.println("Black Hole is determined to be: " + termData.get(0) + " node(s) to the left, " + termData.get(1) +  " node(s) to the right, and at node id: " + termData.get(2));
+		System.out.println("Actual location of black hole is: " + blackHoleIndex);
 	}
 	
 	/**

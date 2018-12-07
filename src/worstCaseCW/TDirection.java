@@ -1,4 +1,4 @@
-package cautiousWalk;
+package worstCaseCW;
 
 public enum TDirection {
 	LEFT, RIGHT

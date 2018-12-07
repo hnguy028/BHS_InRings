@@ -1,13 +1,13 @@
-package cautiousWalk;
+package algorithmOTS;
 
 import java.util.ArrayList;
 
 import datastructures.Node;
 
-public class CWNode extends Node {
-	private ArrayList<Integer> whiteBoard;
+public class TSNode extends Node{
+	ArrayList<Integer> whiteBoard;
 	
-	public CWNode(String _id) {
+	public TSNode(String _id) {
 		super(_id);
 		setLeftEdge(null);
 		setRightEdge(null);

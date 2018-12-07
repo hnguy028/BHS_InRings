@@ -1,4 +1,4 @@
-package cautiousWalk;
+package worstCaseCW;
 
 import java.io.ObjectInputStream.GetField;
 

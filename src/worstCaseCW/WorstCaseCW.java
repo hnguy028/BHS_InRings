@@ -1,4 +1,4 @@
-package cautiousWalk;
+package worstCaseCW;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -7,7 +7,7 @@ import datastructures.Ring;
 import engine.GraphManager;
 import mobileAgents.Agent;
 
-public class CautiousWalk {
+public class WorstCaseCW {
 	Ring graph;
 	Random rng = new Random();
 	
@@ -21,7 +21,7 @@ public class CautiousWalk {
 	
 	private int graphSize;
 	
-	public CautiousWalk(int _graphSize) throws Exception {
+	public WorstCaseCW(int _graphSize) throws Exception {
 		agentList = new ArrayList<CWAgent>();
 		graphSize = _graphSize;
 		

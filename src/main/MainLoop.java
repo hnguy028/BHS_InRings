@@ -3,7 +3,7 @@ package main;
 import algorithmGroup.AlgorithmGroup;
 import algorithmOAT.AlgorithmOAT;
 import algorithmOTS.AlgorithmOTS;
-import cautiousWalk.CautiousWalk;
+import worstCaseCW.WorstCaseCW;
 
 public class MainLoop {
 	public static void main(String[] args) {
@@ -21,7 +21,7 @@ public class MainLoop {
 		case "CautiousWalk":
 			// Cautious Walk Algorithm
 			try {
-				CautiousWalk walk = new CautiousWalk(graphSize);
+				WorstCaseCW walk = new WorstCaseCW(graphSize);
 			} catch (Exception e) { e.printStackTrace(); }
 			break;
 		case "GROUP":
