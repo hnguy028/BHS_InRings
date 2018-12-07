@@ -1,9 +1,9 @@
 package engine;
 
-import java.awt.event.MouseWheelEvent;
-
 import algorithmGroup.AGEdge;
 import algorithmGroup.AGNode;
+import algorithmOAT.ATEdge;
+import algorithmOAT.ATNode;
 import cautiousWalk.CWEdge;
 import cautiousWalk.CWNode;
 import datastructures.Ring;
@@ -46,6 +46,10 @@ public class GraphManager {
 	
 	public Ring generateAlgorithmOptAvgTime(int graphSize) {
 		Ring ring = new Ring();
+		
+		for(int i = 0; i < graphSize; i++) {
+			ring.addNewNode(new ATNode("ID#" + i), new ATEdge());
+		}
 		
 		return ring;
 	}

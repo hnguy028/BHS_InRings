@@ -7,7 +7,8 @@ import cautiousWalk.CautiousWalk;
 
 public class MainLoop {
 	public static void main(String[] args) {
-		String algorithm = "GROUP";
+		String[] algorithms = {"CautiousWalk", "GROUP", "OAT", "OTS"};
+		String algorithm = algorithms[2];
 		int graphSize = 9;
 		
 		// min and max values for rng delay in traveling edge - to simulate asynch agents

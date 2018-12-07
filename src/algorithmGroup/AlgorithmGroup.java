@@ -39,8 +39,8 @@ public class AlgorithmGroup {
 		homebaseIndex = rng.nextInt(graphSize);
 		blackHoleIndex = rng.nextInt(graphSize);
 		
-		homebaseIndex = 2;
-		blackHoleIndex = 4;
+//		homebaseIndex = 2;
+//		blackHoleIndex = 4;
 				
 		// Ensure blackhole and homebase indices are different 
 		while(homebaseIndex == blackHoleIndex) {
@@ -84,20 +84,17 @@ public class AlgorithmGroup {
 				
 		// Print initial state
 		graph.print(); 
+		System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString() + "  -- BH[" + blackHoleIndex + "]");
 			
 		// Start Algorithm Group
 		startAlgorithmGroup();
 	}
 	
 	public void startAlgorithmGroup() {
-		System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString() + "  -- BH[" + blackHoleIndex + "]");
-		
 		boolean loop = true;
 		
 		// max time units - for testing
 		int loopBound = 100;
-				
-		// int blackHoleOffset = 0;
 		
 		while(loop) {
 			if(loopBound <= 0) { loop = false; System.out.println("Forced Termination!");}
