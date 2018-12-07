@@ -34,6 +34,21 @@ public class AGAgent extends Agent {
 		tbStart = false;
 	}
 	
+	public AGAgent(int _id, int _rel_id, int groupSize, int _ringSize, AgentGroup _group, String _name, Node _node, int minAsynch, int maxAsynch) {
+		super(_id, _name, _node, minAsynch, maxAsynch);
+		
+		rel_id = _rel_id; // i
+		q = groupSize; // q
+		ringSize = _ringSize;
+		group = _group;
+		
+		stage = 0;
+		distTraveled = 0;
+		
+		finished = false;
+		tbStart = false;
+	}
+	
 	public boolean moveAndCheck() {
 		if(finished) return false;
 		return _move();

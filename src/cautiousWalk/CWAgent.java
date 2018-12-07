@@ -19,6 +19,14 @@ public class CWAgent extends Agent {
 		distTraveled = 0;
 	}
 	
+	public CWAgent(Integer id, String name, CWNode node, TDirection _direction, int minAsynch, int maxAsynch) {
+		super(id, name, node, minAsynch, maxAsynch);
+		initDirection = _direction;
+		currDirection = _direction;
+		distToTravel = 1;
+		distTraveled = 0;
+	}
+	
 	public TDirection getTravelDirection() { return initDirection; }
 	
 	@Override

@@ -1,7 +1,8 @@
 package algorithmOAT;
 
 public class AlgorithmOAT {
-	public AlgorithmOAT() {
+	
+	public AlgorithmOAT(int _n) {
 		
 	}
 }
