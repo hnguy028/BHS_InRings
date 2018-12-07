@@ -2,8 +2,6 @@ package algorithmOAT;
 
 import java.util.ArrayList;
 
-import javax.management.relation.InvalidRelationTypeException;
-
 import mobileAgents.Agent;
 
 public class ATAgent extends Agent{

@@ -1,6 +1,7 @@
 package worstCaseCW;
 
 import datastructures.Edge;
+import datastructures.EdgeState;
 
 public class CWEdge extends Edge {
 	private EdgeState state = EdgeState.UNEXPLORED;

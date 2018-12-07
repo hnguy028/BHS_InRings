@@ -46,15 +46,10 @@ public class AlgorithmOTS {
 		
 		// Generate agents
 		// LEFT
-		int j = 0;
-		for(int i = 0; i < numAgents/2; i++, j++) {
-			agentList.add(new TSAgent(j, i, graphSize, AgentGroup.LEFT, "Agent#" + j + ":L:" + i, homebase));
-		}
+		agentList.add(new TSAgent(0, graphSize, AgentType.LEFT, "Agent#0", homebase));
 		
 		// RIGHT
-		for(int i = 0; i < numAgents/2; i++, j++) {
-			agentList.add(new TSAgent(j, i, graphSize, AgentGroup.RIGHT, "Agent#" + j + ":R:" + i, homebase));
-		}
+		agentList.add(new TSAgent(1, graphSize, AgentType.RIGHT, "Agent#1", homebase));
 				
 		// Let the respective nodes know that they are blackhole and homebase (and set the agents at homebase)
 		setHomebase(homebaseIndex);
