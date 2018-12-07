@@ -9,6 +9,8 @@ public class TSAgent extends Agent {
 	
 	private int ringSize;
 	
+	private ExploreMode mode;
+	
 	private AgentState state;
 	private AgentType type;
 	
@@ -22,7 +24,8 @@ public class TSAgent extends Agent {
 		ringSize = _graphSize;
 
 		type = _type;
-		
+		state = AgentState.EXPLORE;
+				
 		distTraveled = 0;
 		finished = false;
 	}
@@ -33,17 +36,18 @@ public class TSAgent extends Agent {
 		ringSize = _graphSize;
 
 		type = _type;
+		state = AgentState.EXPLORE;
 		
 		distTraveled = 0;
 		finished = false;
 	}
 	
-	public boolean moveAndCheck() {
+	public boolean moveAndCheck() throws Exception {
 		if(finished) return false;
 		return _move();
 	}
 	
-	private boolean _move() {
+	private boolean _move() throws Exception {
 		if(node == null && edge == null) { throw new NullPointerException("Node and Edge are both null"); }
 		boolean atNode = (node != null);
 		
@@ -59,16 +63,22 @@ public class TSAgent extends Agent {
 		return false;
 	}
 	
-	private boolean handleLeft(boolean atNode) {
+	private boolean handleLeft(boolean atNode) throws Exception {
 		if(atNode) {
 			// check prev edge state
 			TSEdge lEdge = (TSEdge) node.getLeftEdge();
 			TSEdge rEdge = (TSEdge) node.getRightEdge();
 			
 			if(rEdge.getState() == EdgeState.SAFE) {
-				// move left
-			} else if (rEdge.getState() == EdgeState.ACTIVE) {
+				if(lEdge.getState() == EdgeState.ACTIVE) {
+					// mark edge as safe? then move left?
+				} else if(lEdge.getState() == EdgeState.UNEXPLORED) {
+					// move left
+				}
+			} else if (rEdge.getState() == EdgeState.ACTIVE && lEdge.getState() == EdgeState.UNEXPLORED) {
 				// move right
+			} else {
+				throw new Exception("Major Error, invalid state");
 			}
 
 		}

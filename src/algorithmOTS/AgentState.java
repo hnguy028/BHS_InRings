@@ -1,5 +1,5 @@
 package algorithmOTS;
 
 public enum AgentState {
-	SMALL, BIG
+	EXPLORE, RETURN, NOTIFY
 }
