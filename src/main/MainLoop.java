@@ -8,7 +8,7 @@ import worstCaseCW.WorstCaseCW;
 public class MainLoop {
 	public static void main(String[] args) {
 		String[] algorithms = {"CautiousWalk", "GROUP", "OAT", "OTS"};
-		String algorithm = algorithms[2];
+		String algorithm = algorithms[3];
 		int graphSize = 9;
 		
 		// min and max values for rng delay in traveling edge - to simulate asynch agents

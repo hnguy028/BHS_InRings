@@ -1,5 +1,5 @@
 package algorithmOTS;
 
 public enum ExploreMode {
-	SMALL, BIG
+	NULL, SMALL, BIG
 }

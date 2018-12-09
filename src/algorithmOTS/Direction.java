@@ -1,5 +1,5 @@
 package algorithmOTS;
 
-public enum AgentType {
+public enum Direction {
 	LEFT, RIGHT
 }

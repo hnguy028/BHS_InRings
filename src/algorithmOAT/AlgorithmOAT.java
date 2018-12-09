@@ -67,7 +67,7 @@ public class AlgorithmOAT {
 		((ATNode) graph.getNodeList().get(homebaseIndex)).setWhiteBoard(homebaseWhiteBoard);
 				
 		// Print initial state
-		graph.print();
+		// graph.print();
 		System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString() + "  -- BH[" + blackHoleIndex + "]");
 			
 		// Start Algorithm Group
@@ -78,7 +78,7 @@ public class AlgorithmOAT {
 		boolean loop = true;
 		
 		// max time units - for testing
-		int loopBound = 100;
+		int loopBound = 100000000;
 		
 		while(loop) {
 			if(loopBound <= 0) { loop = false; System.out.println("Forced Termination!");}
@@ -90,8 +90,8 @@ public class AlgorithmOAT {
 				}
 			}
 			
-			graph.print();
-			System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString());
+			// graph.print();
+			// System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString());
 			
 			loopBound--;
 		}

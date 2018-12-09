@@ -21,7 +21,7 @@ public class AlgorithmOTS {
 	private ArrayList<TSAgent> agentList; 
 	
 	private int graphSize;
-	public AlgorithmOTS(int _n) {
+	public AlgorithmOTS(int _n) throws Exception {
 		agentList = new ArrayList<TSAgent>();
 		graphSize = _n;
 		
@@ -46,10 +46,10 @@ public class AlgorithmOTS {
 		
 		// Generate agents
 		// LEFT
-		agentList.add(new TSAgent(0, graphSize, AgentType.LEFT, "Agent#0", homebase));
+		agentList.add(new TSAgent(0, graphSize, Direction.LEFT, "Agent#0", homebase));
 		
 		// RIGHT
-		agentList.add(new TSAgent(1, graphSize, AgentType.RIGHT, "Agent#1", homebase));
+		agentList.add(new TSAgent(1, graphSize, Direction.RIGHT, "Agent#1", homebase));
 				
 		// Let the respective nodes know that they are blackhole and homebase (and set the agents at homebase)
 		setHomebase(homebaseIndex);
@@ -67,8 +67,32 @@ public class AlgorithmOTS {
 		startAlgorithmOTS();
 	}
 	
-	public void startAlgorithmOTS() {
+	public void startAlgorithmOTS() throws Exception {
+		boolean loop = true;
 		
+		// max time units - for testing
+		int loopBound = 190;
+		
+		while(loop) {
+			if(loopBound <= 0) { loop = false; System.out.println("Forced Termination!");}
+			
+			// move agents
+			for(TSAgent agent : agentList) {
+				if(agent.moveAndCheck()) {
+					loop = false;
+				}
+			}
+			
+			graph.print();
+			System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString());
+			//  + ":" + ((TSNode) graph.getNodeList().get(3)).getMessage().toString()
+			
+			loopBound--;
+		}
+		
+		System.out.println("Black Hole is determined to be: " + homebaseWhiteBoard.get(0) + " node(s) to the left, " + homebaseWhiteBoard.get(1) +  " node(s) to the right, and at node id: " + homebaseWhiteBoard.get(2));
+		System.out.println("Actual location of black hole is: " + blackHoleIndex);
+
 	}
 	
 	/**
