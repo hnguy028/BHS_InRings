@@ -1,5 +1,8 @@
 package algorithmOTS;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -21,7 +24,20 @@ public class AlgorithmOTS {
 	private ArrayList<TSAgent> agentList; 
 	
 	private int graphSize;
-	public AlgorithmOTS(int _n) throws Exception {
+	
+	private boolean debug;
+	
+	public AlgorithmOTS(int _graphSize) throws Exception {
+		init(_graphSize, -1, -1, -1, -1);
+	}
+	
+	public AlgorithmOTS(int _graphSize, int homeBase, int blackHole, int minWait, int maxWait, boolean _debug) throws Exception {
+		if(blackHole > 0 && homeBase > 0 && blackHole == homeBase) throw new Exception("Black Hole and Home Base cannot be at the same location");
+		debug = _debug;
+		init(_graphSize, homeBase, blackHole, minWait, maxWait);
+	}
+	
+	public void init(int _n, int homeBase, int blackHole, int minWait, int maxWait) throws Exception {
 		agentList = new ArrayList<TSAgent>();
 		graphSize = _n;
 		
@@ -31,11 +47,8 @@ public class AlgorithmOTS {
 		graph = new GraphManager().generateGraph("AlgorithmOptTeamSize", graphSize);
 				
 		// Generate blackhole and homebase index
-		homebaseIndex = rng.nextInt(graphSize);
-		blackHoleIndex = rng.nextInt(graphSize);
-		
-		homebaseIndex = 2;
-		blackHoleIndex = 4;
+		homebaseIndex = homeBase > 0 ? homeBase : rng.nextInt(graphSize);
+		blackHoleIndex = blackHole > 0 ? blackHole : rng.nextInt(graphSize);
 				
 		// Ensure blackhole and homebase indices are different 
 		while(homebaseIndex == blackHoleIndex) {
@@ -45,11 +58,19 @@ public class AlgorithmOTS {
 		TSNode homebase = (TSNode) graph.getNodeList().get(homebaseIndex);
 		
 		// Generate agents
-		// LEFT
-		agentList.add(new TSAgent(0, graphSize, Direction.LEFT, "Agent#0", homebase));
-		
-		// RIGHT
-		agentList.add(new TSAgent(1, graphSize, Direction.RIGHT, "Agent#1", homebase));
+		if(minWait > 0 && maxWait > 0) {
+			// LEFT
+			agentList.add(new TSAgent(0, graphSize, Direction.LEFT, "Agent#0", homebase, minWait, maxWait));
+			
+			// RIGHT
+			agentList.add(new TSAgent(1, graphSize, Direction.RIGHT, "Agent#1", homebase));
+		} else {
+			// LEFT
+			agentList.add(new TSAgent(0, graphSize, Direction.LEFT, "Agent#0", homebase, minWait, maxWait));
+			
+			// RIGHT
+			agentList.add(new TSAgent(1, graphSize, Direction.RIGHT, "Agent#1", homebase));	
+		}
 				
 		// Let the respective nodes know that they are blackhole and homebase (and set the agents at homebase)
 		setHomebase(homebaseIndex);
@@ -68,10 +89,14 @@ public class AlgorithmOTS {
 	}
 	
 	public void startAlgorithmOTS() throws Exception {
+		System.out.println("Start Algorithm : Algorithm Optimal Team Size");
 		boolean loop = true;
 		
 		// max time units - for testing
-		int loopBound = 190;
+		int loopBound = 1000000000;
+		int counter = 0;
+		
+		long startTime = System.currentTimeMillis();
 		
 		while(loop) {
 			if(loopBound <= 0) { loop = false; System.out.println("Forced Termination!");}
@@ -83,15 +108,24 @@ public class AlgorithmOTS {
 				}
 			}
 			
-			graph.print();
-			System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString());
-			//  + ":" + ((TSNode) graph.getNodeList().get(3)).getMessage().toString()
+			if(debug) {
+				graph.print();
+				System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString());
+			}
 			
 			loopBound--;
+			counter++;
 		}
+		
+		long elapsedTime = System.currentTimeMillis() - startTime;
+	    // BufferedWriter writer = new BufferedWriter(new FileWriter("OTS.txt"));
+	    PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("OTS.txt", true)));
+	    writer.write("" + elapsedTime + "," + counter + "\n");
+	    writer.close();
 		
 		System.out.println("Black Hole is determined to be: " + homebaseWhiteBoard.get(0) + " node(s) to the left, " + homebaseWhiteBoard.get(1) +  " node(s) to the right, and at node id: " + homebaseWhiteBoard.get(2));
 		System.out.println("Actual location of black hole is: " + blackHoleIndex);
+		System.out.println("Home Base Location: " + homebaseIndex);
 
 	}
 	

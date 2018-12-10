@@ -1,8 +1,7 @@
 package worstCaseCW;
 
-import java.io.ObjectInputStream.GetField;
+import java.util.ArrayList;
 
-import datastructures.Edge;
 import mobileAgents.Agent;
 
 public class CWAgent extends Agent {
@@ -11,20 +10,24 @@ public class CWAgent extends Agent {
 	private TDirection initDirection;
 	private TDirection currDirection;
 	
-	public CWAgent(Integer id, String name, CWNode node, TDirection _direction) {
+	private int ringSize;
+	
+	public CWAgent(Integer id, String name, Integer _graphSize, CWNode node, TDirection _direction) {
 		super(id, name, node);
 		initDirection = _direction;
 		currDirection = _direction;
 		distToTravel = 1;
 		distTraveled = 0;
+		ringSize = _graphSize;
 	}
 	
-	public CWAgent(Integer id, String name, CWNode node, TDirection _direction, int minAsynch, int maxAsynch) {
+	public CWAgent(Integer id, String name, Integer _graphSize, CWNode node, TDirection _direction, int minAsynch, int maxAsynch) {
 		super(id, name, node, minAsynch, maxAsynch);
 		initDirection = _direction;
 		currDirection = _direction;
 		distToTravel = 1;
 		distTraveled = 0;
+		ringSize = _graphSize;
 	}
 	
 	public TDirection getTravelDirection() { return initDirection; }
@@ -42,14 +45,14 @@ public class CWAgent extends Agent {
 				((CWEdge) edge).setActive(name);
 				break;
 		}
+		waitCounter = 1;
 	}
 	
-	@Override
-	public void move() throws Exception {
+	public boolean _move() throws Exception {
 		if(node == null && edge == null) { throw new NullPointerException("Node and Edge are both null"); }
 		
 		if(node != null) {
-			if(node.isBlackHole()) return; // Do nothing, we are dead XD
+			if(node.isBlackHole()) return false; // Do nothing, we are dead XD
 				
 			if(currDirection.equals(TDirection.LEFT)) edge = node.getLeftEdge();
 			else edge = node.getRightEdge();
@@ -83,14 +86,22 @@ public class CWAgent extends Agent {
 				distTraveled++;
 				
 				if(node.isHomebase()) {
+					ArrayList<Integer> whiteboard = ((CWNode) node).getWhiteBoard();
 					// Update whiteboard for distance explored for this agent
-					((CWNode) node).getWhiteBoard().set(id, distToTravel);
+					whiteboard.set(id, distToTravel);
 					
 					currDirection = initDirection;
 					
 					// increment the distance to explore next
 					 distToTravel++;
 					 distTraveled = 0;
+					 
+					 if(whiteboard.size() == 2) {
+						 if(whiteboard.get(0) + whiteboard.get(1) == ringSize - 2) {
+							 System.out.println(whiteboard.toString());
+							 return true;
+						 }
+					 }
 				}
 				
 				// Reached destination node, turn around
@@ -99,5 +110,6 @@ public class CWAgent extends Agent {
 				}
 			}
 		}
+		return false;
 	} 
 }

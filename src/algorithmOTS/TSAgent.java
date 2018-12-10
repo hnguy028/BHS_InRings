@@ -147,7 +147,7 @@ public class TSAgent extends Agent {
 				if(atNode && node.isHomebase()) {
 					finished = true; 
 					int i = isLeft ? distTraveled : (ringSize - 1) - distTraveled;
-					int j = isLeft ? (ringSize - 1) - distTraveled : distTraveled;
+					int j = isLeft ? (ringSize - 2) - distTraveled : distTraveled;
 					ArrayList<Integer> wb = ((TSNode) node).getWhiteBoard();
 					wb.add(i);
 					wb.add(j);
@@ -198,7 +198,7 @@ public class TSAgent extends Agent {
 				if(atNode && node.isHomebase()) { 
 					finished = true; 
 					int i = isLeft ? distTraveled : (ringSize - 1) - distTraveled;
-					int j = isLeft ? (ringSize - 1) - distTraveled : distTraveled;
+					int j = isLeft ? (ringSize - 1) - distTraveled : distTraveled + 1;
 					ArrayList<Integer> wb = ((TSNode) node).getWhiteBoard();
 					wb.add(i);
 					wb.add(j);

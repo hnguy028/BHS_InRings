@@ -1,5 +1,9 @@
 package algorithmOAT;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -23,7 +27,19 @@ public class AlgorithmOAT {
 	
 	private int graphSize;
 	
-	public AlgorithmOAT(int _n) {
+	private boolean debug = false;
+	
+	public AlgorithmOAT(int _graphSize) throws IOException {
+		init(_graphSize, -1, -1, -1, -1);
+	}
+	
+	public AlgorithmOAT(int _graphSize, int homebase, int blackHole, int minWait, int maxWait, boolean _debug) throws Exception {
+		if(blackHole > 0 && homebase > 0 && blackHole == homebase) throw new Exception("Black Hole and Home Base cannot be at the same location");
+		debug = _debug;
+		init(_graphSize, homebase, blackHole, minWait, maxWait);
+	}
+	
+	private void init(int _n, int homeBase, int blackHole, int minWait, int maxWait) throws IOException {
 		agentList = new ArrayList<ATAgent>();
 		graphSize = _n;
 		
@@ -33,11 +49,8 @@ public class AlgorithmOAT {
 		graph = new GraphManager().generateGraph("AlgorithmOptAvgTime", graphSize);
 				
 		// Generate blackhole and homebase index
-		homebaseIndex = rng.nextInt(graphSize);
-		blackHoleIndex = rng.nextInt(graphSize);
-		
-//		homebaseIndex = 7;
-//		blackHoleIndex = 0;
+		homebaseIndex = homeBase > 0 ? homeBase : rng.nextInt(graphSize);
+		blackHoleIndex = blackHole > 0 ? blackHole : rng.nextInt(graphSize);
 				
 		// Ensure blackhole and homebase indices are different 
 		while(homebaseIndex == blackHoleIndex) {
@@ -50,12 +63,21 @@ public class AlgorithmOAT {
 		// LEFT
 		int j = 0;
 		for(int i = 0; i < numAgents/2; i++, j++) {
-			agentList.add(new ATAgent(j, i, graphSize, AgentGroup.LEFT, "Agent#" + j + ":L:" + i, homebase));
+			if(minWait > 0 && maxWait > 0) {
+				agentList.add(new ATAgent(j, i, graphSize, AgentGroup.LEFT, "Agent#" + j + ":L:" + i, homebase, minWait, maxWait));
+			} else {
+				agentList.add(new ATAgent(j, i, graphSize, AgentGroup.LEFT, "Agent#" + j + ":L:" + i, homebase));
+			}
 		}
 		
 		// RIGHT
 		for(int i = 0; i < numAgents/2; i++, j++) {
-			agentList.add(new ATAgent(j, i, graphSize, AgentGroup.RIGHT, "Agent#" + j + ":R:" + i, homebase));
+			if(minWait > 0 && maxWait > 0) {
+				agentList.add(new ATAgent(j, i, graphSize, AgentGroup.RIGHT, "Agent#" + j + ":R:" + i, homebase, minWait, maxWait));
+			} else {
+				agentList.add(new ATAgent(j, i, graphSize, AgentGroup.RIGHT, "Agent#" + j + ":R:" + i, homebase));
+			}
+			
 		}
 				
 		// Let the respective nodes know that they are blackhole and homebase (and set the agents at homebase)
@@ -74,11 +96,16 @@ public class AlgorithmOAT {
 		startAlgorithmOAT();
 	}
 	
-	public void startAlgorithmOAT() {
+	public void startAlgorithmOAT() throws IOException {
+		System.out.println("Start Algorithm : Algorithm Optimal Average Time");
+		
 		boolean loop = true;
 		
 		// max time units - for testing
-		int loopBound = 100000000;
+		int loopBound = 1000000000;
+		int counter = 0;
+		
+		long startTime = System.currentTimeMillis();
 		
 		while(loop) {
 			if(loopBound <= 0) { loop = false; System.out.println("Forced Termination!");}
@@ -90,19 +117,28 @@ public class AlgorithmOAT {
 				}
 			}
 			
-			// graph.print();
-			// System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString());
+			if(debug) {
+				graph.print();
+				System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString());
+			}
 			
 			loopBound--;
+			counter++;
 		}
 		
 		ATNode homebase = (ATNode) graph.getNodeList().get(homebaseIndex);
 		ArrayList<Integer>termData = homebase.getTerminationData();
 		System.out.println(termData.toString());
 		
-		
+		long elapsedTime = System.currentTimeMillis() - startTime;
+	    //BufferedWriter writer = new BufferedWriter(new FileWriter("OAT.txt"));
+		PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("OAT.txt", true)));
+	    writer.write("" + elapsedTime + "," + counter + "\n");
+	    writer.close();
+	    
 		System.out.println("Black Hole is determined to be: " + termData.get(0) + " node(s) to the left, " + termData.get(1) +  " node(s) to the right, and at node id: " + termData.get(2));
 		System.out.println("Actual location of black hole is: " + blackHoleIndex);
+		System.out.println("Home Base Location: " + homebaseIndex);
 	}
 	
 	/**

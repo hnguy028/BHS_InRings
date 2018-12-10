@@ -60,7 +60,8 @@ public class Agent {
 	public String getName() { return name; }
 	
 	protected void getNewWaitTime() {
-		waitCounter =  new Random().nextInt(maxWait) + minWait;
+		//waitCounter =  new Random().nextInt(maxWait) + minWait;
+		waitCounter = 1;
 	}
 	
 	/**
