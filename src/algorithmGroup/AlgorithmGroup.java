@@ -132,7 +132,7 @@ public class AlgorithmGroup {
 		
 		// max time units - for testing
 		int loopBound = 1000000000;
-		int counter = 0;
+		int idealTimeCounter = 0;
 		
 		long startTime = System.currentTimeMillis();
 		
@@ -152,13 +152,13 @@ public class AlgorithmGroup {
 			}
 			
 			loopBound--;
-			counter ++;
+			idealTimeCounter ++;
 		}
 		
 		long elapsedTime = System.currentTimeMillis() - startTime;
 	    //BufferedWriter writer = new BufferedWriter(new FileWriter("Group.txt"));
 		PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("Group.txt", true)));
-	    writer.write("" + elapsedTime + "," + counter + "\n");
+	    writer.write("" + elapsedTime + "," + (idealTimeCounter/2) + "\n");
 	    writer.close();
 	}
 	

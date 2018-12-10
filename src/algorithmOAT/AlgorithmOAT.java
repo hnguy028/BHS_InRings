@@ -103,7 +103,7 @@ public class AlgorithmOAT {
 		
 		// max time units - for testing
 		int loopBound = 1000000000;
-		int counter = 0;
+		int idealTimeCounter = 0;
 		
 		long startTime = System.currentTimeMillis();
 		
@@ -123,7 +123,7 @@ public class AlgorithmOAT {
 			}
 			
 			loopBound--;
-			counter++;
+			idealTimeCounter++;
 		}
 		
 		ATNode homebase = (ATNode) graph.getNodeList().get(homebaseIndex);
@@ -133,7 +133,7 @@ public class AlgorithmOAT {
 		long elapsedTime = System.currentTimeMillis() - startTime;
 	    //BufferedWriter writer = new BufferedWriter(new FileWriter("OAT.txt"));
 		PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("OAT.txt", true)));
-	    writer.write("" + elapsedTime + "," + counter + "\n");
+	    writer.write("" + elapsedTime + "," + (idealTimeCounter/2) + "\n");
 	    writer.close();
 	    
 		System.out.println("Black Hole is determined to be: " + termData.get(0) + " node(s) to the left, " + termData.get(1) +  " node(s) to the right, and at node id: " + termData.get(2));

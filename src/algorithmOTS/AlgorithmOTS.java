@@ -94,7 +94,7 @@ public class AlgorithmOTS {
 		
 		// max time units - for testing
 		int loopBound = 1000000000;
-		int counter = 0;
+		int idealTimeCounter = 0;
 		
 		long startTime = System.currentTimeMillis();
 		
@@ -114,13 +114,13 @@ public class AlgorithmOTS {
 			}
 			
 			loopBound--;
-			counter++;
+			idealTimeCounter++;
 		}
 		
 		long elapsedTime = System.currentTimeMillis() - startTime;
 	    // BufferedWriter writer = new BufferedWriter(new FileWriter("OTS.txt"));
 	    PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("OTS.txt", true)));
-	    writer.write("" + elapsedTime + "," + counter + "\n");
+	    writer.write("" + elapsedTime + "," + (idealTimeCounter/2) + "\n");
 	    writer.close();
 		
 		System.out.println("Black Hole is determined to be: " + homebaseWhiteBoard.get(0) + " node(s) to the left, " + homebaseWhiteBoard.get(1) +  " node(s) to the right, and at node id: " + homebaseWhiteBoard.get(2));
