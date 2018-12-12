@@ -6,10 +6,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.xml.ws.AsyncHandler;
-
-import org.w3c.dom.css.Counter;
-
 import datastructures.Ring;
 import engine.GraphManager;
 import mobileAgents.Agent;
@@ -28,14 +24,16 @@ public class WorstCaseCW {
 	
 	private int graphSize;
 	private boolean debug = false;
+	private int filenum;
 	
 	public WorstCaseCW(int _graphSize) throws Exception {
 		init(_graphSize, -1, -1, -1, -1);
 	}
 	
-	public WorstCaseCW(int _graphSize, int homebase, int blackHole, int minWait, int maxWait, boolean _debug) throws Exception {
-		if(blackHole > 0 && homebase > 0 && blackHole == homebase) throw new Exception("Black Hole and Home Base cannot be at the same location");
+	public WorstCaseCW(int _graphSize, int homebase, int blackHole, int minWait, int maxWait, boolean _debug, int i) throws Exception {
+		if(blackHole >= 0 && homebase >= 0 && blackHole == homebase) throw new Exception("Black Hole and Home Base cannot be at the same location");
 		debug = _debug;
+		filenum = i;
 		init(_graphSize, homebase, blackHole, minWait, maxWait);
 	}
 	
@@ -47,8 +45,8 @@ public class WorstCaseCW {
 		graph = new GraphManager().generateGraph("CautiousWalk", graphSize);
 		
 		// Generate blackhole and homebase index
-		homebaseIndex = homebase > 0 ? homebase : rng.nextInt(graphSize);
-		blackHoleIndex = blackHole > 0 ? blackHole : rng.nextInt(graphSize);
+		homebaseIndex = homebase >= 0 ? homebase : rng.nextInt(graphSize);
+		blackHoleIndex = blackHole >= 0 ? blackHole : rng.nextInt(graphSize);
 		
 		// Ensure blackhole and homebase indices are different 
 		while(homebaseIndex == blackHoleIndex) {
@@ -95,7 +93,11 @@ public class WorstCaseCW {
 		
 		int blackHoleOffset = 0;
 		
-		long startTime = System.currentTimeMillis();
+//		PrintWriter tWriter = new PrintWriter(new BufferedWriter(new FileWriter("WCCW_move_time" + filenum + ".csv", true)));
+	    
+		long startTime = System.nanoTime();
+//		long intermediateTime1 = System.nanoTime();
+//		long intermediateTime2 = System.nanoTime();
 		
 		while(loop) {
 			if(loopBound <= 0) { loop = false; System.out.println("Forced Termination!");}
@@ -105,6 +107,10 @@ public class WorstCaseCW {
 					loop = false;
 				}
 			}
+			
+//			intermediateTime2 = System.nanoTime();
+//			tWriter.write(idealTimeCounter + "," + (intermediateTime2 - intermediateTime1) + "\n");
+//			intermediateTime1 = intermediateTime2;
 			
 			if(debug) {
 				graph.print();
@@ -116,9 +122,11 @@ public class WorstCaseCW {
 			idealTimeCounter++;
 		}
 		
-		long elapsedTime = System.currentTimeMillis() - startTime;
+		long elapsedTime = System.nanoTime() - startTime;
+//		tWriter.close();
+		
 	    //BufferedWriter writer = new BufferedWriter(new FileWriter("WCCW.txt"));
-		PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("WCCW.txt", true)));
+		PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("WCCW" + graphSize + ".csv", true)));
 	    writer.write("" + elapsedTime + "," + (idealTimeCounter/2) + "\n");
 	    writer.close();
 	    

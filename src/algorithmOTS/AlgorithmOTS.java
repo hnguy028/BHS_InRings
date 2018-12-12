@@ -27,13 +27,16 @@ public class AlgorithmOTS {
 	
 	private boolean debug;
 	
+	private int filenum;
+	
 	public AlgorithmOTS(int _graphSize) throws Exception {
 		init(_graphSize, -1, -1, -1, -1);
 	}
 	
-	public AlgorithmOTS(int _graphSize, int homeBase, int blackHole, int minWait, int maxWait, boolean _debug) throws Exception {
-		if(blackHole > 0 && homeBase > 0 && blackHole == homeBase) throw new Exception("Black Hole and Home Base cannot be at the same location");
+	public AlgorithmOTS(int _graphSize, int homeBase, int blackHole, int minWait, int maxWait, boolean _debug, int i) throws Exception {
+		if(blackHole >= 0 && homeBase >= 0 && blackHole == homeBase) throw new Exception("Black Hole and Home Base cannot be at the same location");
 		debug = _debug;
+		filenum = i;
 		init(_graphSize, homeBase, blackHole, minWait, maxWait);
 	}
 	
@@ -47,8 +50,8 @@ public class AlgorithmOTS {
 		graph = new GraphManager().generateGraph("AlgorithmOptTeamSize", graphSize);
 				
 		// Generate blackhole and homebase index
-		homebaseIndex = homeBase > 0 ? homeBase : rng.nextInt(graphSize);
-		blackHoleIndex = blackHole > 0 ? blackHole : rng.nextInt(graphSize);
+		homebaseIndex = homeBase >= 0 ? homeBase : rng.nextInt(graphSize);
+		blackHoleIndex = blackHole >= 0 ? blackHole : rng.nextInt(graphSize);
 				
 		// Ensure blackhole and homebase indices are different 
 		while(homebaseIndex == blackHoleIndex) {
@@ -96,7 +99,11 @@ public class AlgorithmOTS {
 		int loopBound = 1000000000;
 		int idealTimeCounter = 0;
 		
-		long startTime = System.currentTimeMillis();
+//		PrintWriter tWriter = new PrintWriter(new BufferedWriter(new FileWriter("OTS_move_time" + filenum + ".csv", true)));
+	    
+		long startTime = System.nanoTime();
+//		long intermediateTime1 = System.nanoTime();
+//		long intermediateTime2 = System.nanoTime();
 		
 		while(loop) {
 			if(loopBound <= 0) { loop = false; System.out.println("Forced Termination!");}
@@ -108,6 +115,10 @@ public class AlgorithmOTS {
 				}
 			}
 			
+//			intermediateTime2 = System.nanoTime();
+//			tWriter.write(idealTimeCounter + "," + (intermediateTime2 - intermediateTime1) + "\n");
+//			intermediateTime1 = intermediateTime2;
+			
 			if(debug) {
 				graph.print();
 				System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString());
@@ -117,9 +128,11 @@ public class AlgorithmOTS {
 			idealTimeCounter++;
 		}
 		
-		long elapsedTime = System.currentTimeMillis() - startTime;
+		long elapsedTime = System.nanoTime() - startTime;
+//	    tWriter.close();
+	    
 	    // BufferedWriter writer = new BufferedWriter(new FileWriter("OTS.txt"));
-	    PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("OTS.txt", true)));
+	    PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("OTS" + graphSize + ".csv", true)));
 	    writer.write("" + elapsedTime + "," + (idealTimeCounter/2) + "\n");
 	    writer.close();
 		

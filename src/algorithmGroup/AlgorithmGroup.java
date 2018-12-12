@@ -36,7 +36,7 @@ public class AlgorithmGroup {
 	}
 	
 	public AlgorithmGroup(int _graphSize, int homeBase, int blackHole, int minWait, int maxWait, boolean _debug) throws Exception {
-		if(blackHole > 0 && homeBase > 0 && blackHole == homeBase) throw new Exception("Black Hole and Home Base cannot be at the same location");
+		if(blackHole >= 0 && homeBase >= 0 && blackHole == homeBase) throw new Exception("Black Hole and Home Base cannot be at the same location");
 		debug = _debug;
 		init(_graphSize, homeBase, blackHole, minWait, maxWait);
 	}
@@ -52,8 +52,8 @@ public class AlgorithmGroup {
 		graph = new GraphManager().generateGraph("AlgorithmGroup", graphSize);
 				
 		// Generate blackhole and homebase index
-		homebaseIndex = homeBase > 0 ? homeBase : rng.nextInt(graphSize);
-		blackHoleIndex = blackHole > 0 ? blackHole : rng.nextInt(graphSize);
+		homebaseIndex = homeBase >= 0 ? homeBase : rng.nextInt(graphSize);
+		blackHoleIndex = blackHole >= 0 ? blackHole : rng.nextInt(graphSize);
 		
 //		homebaseIndex = 2;
 //		blackHoleIndex = 4;
@@ -134,7 +134,11 @@ public class AlgorithmGroup {
 		int loopBound = 1000000000;
 		int idealTimeCounter = 0;
 		
+//		PrintWriter tWriter = new PrintWriter(new BufferedWriter(new FileWriter("Group_move_time.csv", true)));
+	    
 		long startTime = System.currentTimeMillis();
+//		long intermediateTime1 = System.currentTimeMillis();
+//		long intermediateTime2 = System.currentTimeMillis();
 		
 		while(loop) {
 			if(loopBound <= 0) { loop = false; System.out.println("Forced Termination!");}
@@ -146,6 +150,10 @@ public class AlgorithmGroup {
 				}
 			}
 			
+//			intermediateTime2 = System.currentTimeMillis();
+//			tWriter.write("" + (intermediateTime2 - intermediateTime1) + "," + "\n");
+//			intermediateTime1 = intermediateTime2;
+			
 			if(debug) {
 				graph.print();
 				System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString());
@@ -156,8 +164,10 @@ public class AlgorithmGroup {
 		}
 		
 		long elapsedTime = System.currentTimeMillis() - startTime;
+//		tWriter.close();
+		
 	    //BufferedWriter writer = new BufferedWriter(new FileWriter("Group.txt"));
-		PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("Group.txt", true)));
+		PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("Group.csv", true)));
 	    writer.write("" + elapsedTime + "," + (idealTimeCounter/2) + "\n");
 	    writer.close();
 	}

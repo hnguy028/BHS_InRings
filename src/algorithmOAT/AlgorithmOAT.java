@@ -28,14 +28,16 @@ public class AlgorithmOAT {
 	private int graphSize;
 	
 	private boolean debug = false;
+	private int filenum;
 	
 	public AlgorithmOAT(int _graphSize) throws IOException {
 		init(_graphSize, -1, -1, -1, -1);
 	}
 	
-	public AlgorithmOAT(int _graphSize, int homebase, int blackHole, int minWait, int maxWait, boolean _debug) throws Exception {
-		if(blackHole > 0 && homebase > 0 && blackHole == homebase) throw new Exception("Black Hole and Home Base cannot be at the same location");
+	public AlgorithmOAT(int _graphSize, int homebase, int blackHole, int minWait, int maxWait, boolean _debug, int i) throws Exception {
+		if(blackHole >= 0 && homebase >= 0 && blackHole == homebase) throw new Exception("Black Hole and Home Base cannot be at the same location");
 		debug = _debug;
+		filenum = i;
 		init(_graphSize, homebase, blackHole, minWait, maxWait);
 	}
 	
@@ -49,8 +51,8 @@ public class AlgorithmOAT {
 		graph = new GraphManager().generateGraph("AlgorithmOptAvgTime", graphSize);
 				
 		// Generate blackhole and homebase index
-		homebaseIndex = homeBase > 0 ? homeBase : rng.nextInt(graphSize);
-		blackHoleIndex = blackHole > 0 ? blackHole : rng.nextInt(graphSize);
+		homebaseIndex = homeBase >= 0 ? homeBase : rng.nextInt(graphSize);
+		blackHoleIndex = blackHole >= 0 ? blackHole : rng.nextInt(graphSize);
 				
 		// Ensure blackhole and homebase indices are different 
 		while(homebaseIndex == blackHoleIndex) {
@@ -105,7 +107,11 @@ public class AlgorithmOAT {
 		int loopBound = 1000000000;
 		int idealTimeCounter = 0;
 		
-		long startTime = System.currentTimeMillis();
+//		PrintWriter tWriter = new PrintWriter(new BufferedWriter(new FileWriter("OAT_move_time" + filenum + ".csv", true)));
+	    
+		long startTime = System.nanoTime();
+//		long intermediateTime1 = System.nanoTime();
+//		long intermediateTime2 = System.nanoTime();
 		
 		while(loop) {
 			if(loopBound <= 0) { loop = false; System.out.println("Forced Termination!");}
@@ -117,6 +123,11 @@ public class AlgorithmOAT {
 				}
 			}
 			
+//			intermediateTime2 = System.nanoTime();
+//			long diff = (intermediateTime2 - intermediateTime1);
+//			tWriter.write(idealTimeCounter + "," + diff + "\n");
+//			intermediateTime1 = intermediateTime2;
+			
 			if(debug) {
 				graph.print();
 				System.out.println("HB[" + homebaseIndex + "]:" + homebaseWhiteBoard.toString());
@@ -125,14 +136,15 @@ public class AlgorithmOAT {
 			loopBound--;
 			idealTimeCounter++;
 		}
+		long elapsedTime = System.nanoTime() - startTime;
+//		tWriter.close();
 		
 		ATNode homebase = (ATNode) graph.getNodeList().get(homebaseIndex);
 		ArrayList<Integer>termData = homebase.getTerminationData();
 		System.out.println(termData.toString());
 		
-		long elapsedTime = System.currentTimeMillis() - startTime;
 	    //BufferedWriter writer = new BufferedWriter(new FileWriter("OAT.txt"));
-		PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("OAT.txt", true)));
+		PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter("OAT" + graphSize + ".csv", true)));
 	    writer.write("" + elapsedTime + "," + (idealTimeCounter/2) + "\n");
 	    writer.close();
 	    

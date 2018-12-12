@@ -114,6 +114,7 @@ public class TSAgent extends Agent {
 					// go back to our side an act as small
 					state = AgentState.STAGE_C;
 					spaceToExplore = 1;
+					distTraveled = 0;
 					
 					return false;
 				}
@@ -146,8 +147,9 @@ public class TSAgent extends Agent {
 			if(smallDone) {
 				if(atNode && node.isHomebase()) {
 					finished = true; 
-					int i = isLeft ? distTraveled : (ringSize - 1) - distTraveled;
-					int j = isLeft ? (ringSize - 2) - distTraveled : distTraveled;
+					int i = isLeft ? distTraveled : (ringSize) - distTraveled;
+					int j = isLeft ? (ringSize) - distTraveled : distTraveled + 1;
+
 					ArrayList<Integer> wb = ((TSNode) node).getWhiteBoard();
 					wb.add(i);
 					wb.add(j);
@@ -161,13 +163,7 @@ public class TSAgent extends Agent {
 			}
 			
 			if(atNode) {
-				// if explored once, since we are small, go to next stage
-				if(currentExploreSpace >= spaceToExplore) {
-					state = AgentState.STAGE_E;
-					distTraveled = 0;
-					hasReturned = false;
-					return false;
-				}
+				// Hieu here -> check distTraveled is being counted/reset correctly this is probably why the node steps into the black hole sometimes
 				
 				TSEdge forthEdge = isLeft ? (TSEdge) node.getLeftEdge() : (TSEdge) node.getRightEdge();
 				
@@ -179,6 +175,14 @@ public class TSAgent extends Agent {
 						distTraveled = 0;
 						smallDone = true;
 					}
+				}
+				
+				// if explored once, since we are small, go to next stage
+				if(currentExploreSpace >= spaceToExplore) {
+					state = AgentState.STAGE_E;
+					distTraveled = 0;
+					hasReturned = false;
+					return false;
 				}
 				
 				if(hasReturned) {
